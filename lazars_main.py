@@ -1,6 +1,7 @@
 # import the pygame module, so you can use it
 import pygame
 import sys
+import os
 
 
 # initialize the pygame module
@@ -23,9 +24,30 @@ WHITE = (255, 255, 255)
 SCREEN_WIDTH = 500
 SCREEN_HEIGHT = 300
 
+
+class Wall(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.image = pygame.image.load(os.path.join("assets", "wall.png"))
+        self.rect = self.image.get_rect()
+        self.rect.center = (SCREEN_WIDTH//2, SCREEN_HEIGHT//2)
+
+    def blit_sprite(self, surface):
+        surface.blit(
+            source=self.image,
+            dest=(self.rect.centerx-self.image.get_size()[0]//2,
+                  self.rect.centery-self.image.get_size()[1]//2)
+        )
+
+
+class Player(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+
+
 # create a surface on screen that has the size of 240 x 180
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-walls = [
+borders = [
     pygame.draw.line(screen, WHITE, (SCREEN_WIDTH-1, 0), (0, 0)),
     pygame.draw.line(screen, WHITE, (0, 0), (0, SCREEN_HEIGHT-1)),
     pygame.draw.line(
@@ -40,13 +62,10 @@ walls = [
         (SCREEN_WIDTH-1, SCREEN_HEIGHT-1),
         (SCREEN_WIDTH-1, 0)
     ),
-    pygame.draw.rect(screen, WHITE, (100, 100, 50, 75)),
 ]
-
-
-class Player(pygame.sprite.Sprite):
-    def __init__(self):
-        super().__init__()
+wall = Wall()
+walls = pygame.sprite.Group()
+walls.add(wall)
 
 
 # define a main function
@@ -59,9 +78,13 @@ def main():
         point = pygame.mouse.get_pos()
         track = font.render(str(point), True, WHITE)
         screen.blit(track, (SCREEN_WIDTH-100, 10))
-        for rect in walls:
+        for rect in borders:
             if rect.collidepoint(point):
                 print("COLLISION" + str(rect))
+        for sprite in walls:
+            sprite.blit_sprite(screen)
+            if sprite.rect.collidepoint(point):
+                print("COLLISION" + str(sprite))
         # event handling, gets all event from the event queue
         for event in pygame.event.get():
             # only do something if the event is of type QUIT
