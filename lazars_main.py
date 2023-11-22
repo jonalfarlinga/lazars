@@ -2,11 +2,17 @@
 import pygame
 import sys
 import os
+from debug_me import debug
+import maps
 
 
+'''
+set up constants
+'''
 # initialize the pygame module
 pygame.init()
 
+# set max FPS
 FPS = 60
 FramesPerSecond = pygame.time.Clock()
 
@@ -21,16 +27,24 @@ BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 
 # initialize assets
-SCREEN_WIDTH = 500
-SCREEN_HEIGHT = 300
+SCREEN_WIDTH = 1024
+SCREEN_HEIGHT = 768
+BORDER_WIDTH = 12
+
+
+'''
+create classes
+'''
 
 
 class Wall(pygame.sprite.Sprite):
-    def __init__(self):
+    def __init__(self, center=None):
         super().__init__()
         self.image = pygame.image.load(os.path.join("assets", "wall.png"))
         self.rect = self.image.get_rect()
-        self.rect.center = (SCREEN_WIDTH//2, SCREEN_HEIGHT//2)
+        if center:
+            self.rect.centerx = center[0]
+            self.rect.centery = center[1]
 
     def blit_sprite(self, surface):
         surface.blit(
@@ -46,6 +60,7 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.image.load(os.path.join("assets", "player.png"))
         self.rect = self.image.get_rect()
         self.rect.center = (SCREEN_WIDTH//2, SCREEN_HEIGHT//2)
+        self.direction = 180  # facing in degrees
 
     def blit_sprite(self, surface):
         surface.blit(
@@ -54,8 +69,30 @@ class Player(pygame.sprite.Sprite):
                   self.rect.centery-self.image.get_size()[1]//2)
         )
 
+    def laser(self):
+        pass
 
-# create a surface on screen that has the size of 240 x 180
+
+def print_background(screen):
+    screen.fill(BLACK)
+    pygame.draw.lines(
+        screen,
+        WHITE,
+        True,
+        [
+            (0, 0),
+            (0, SCREEN_HEIGHT),
+            (SCREEN_WIDTH, SCREEN_HEIGHT),
+            (SCREEN_WIDTH, 0)
+        ],
+        48
+    )
+
+
+'''
+initialize game environment
+'''
+# create a surface on screen and initialize entities
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 borders = [
     pygame.draw.line(screen, WHITE, (SCREEN_WIDTH-1, 0), (0, 0)),
@@ -73,9 +110,10 @@ borders = [
         (SCREEN_WIDTH-1, 0)
     ),
 ]
-wall = Wall()
 walls = pygame.sprite.Group()
-walls.add(wall)
+for place in maps.testmap():
+    wall = Wall(place)
+    walls.add(wall)
 
 player = Player()
 player.rect.center = (50, 50)
@@ -87,17 +125,9 @@ def main():
 
     # main loop
     while True:
-        screen.fill(BLACK)
-        point = pygame.mouse.get_pos()
-        track = font.render(str(point), True, WHITE)
-        screen.blit(track, (SCREEN_WIDTH-100, 10))
-        for rect in borders:
-            if rect.collidepoint(point):
-                print("COLLISION" + str(rect))
-        for sprite in walls:
-            sprite.blit_sprite(screen)
-            if sprite.rect.collidepoint(point):
-                print("COLLISION" + str(sprite))
+        print_background(screen)
+        debug(pygame.mouse.get_pos(), screen,
+              SCREEN_WIDTH, borders + walls.sprites())
         player.blit_sprite(screen)
         # event handling, gets all event from the event queue
         for event in pygame.event.get():
