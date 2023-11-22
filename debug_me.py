@@ -1,17 +1,15 @@
 import pygame
+from constants import *
 
 
-def debug(mouse_pos, screen, sc_width, sprites):
+def debug(mouse_pos, screen, blocks):
     font = pygame.font.SysFont("Arial", 20)
-    track = font.render(str(mouse_pos), True, (0, 0, 0))
-    screen.blit(track, (sc_width-100, 10))
-    """ for rect in borders:
-        if rect.collidepoint(mouse_pos):
-            print("COLLISION" + str(rect)) """
-    for sprite in sprites:
-        if hasattr(sprite, "blit_sprite"):
-            sprite.blit_sprite(screen)
-            if sprite.rect.collidepoint(mouse_pos):
-                print("COLLISION" + str(sprite))
-        elif sprite.collidepoint(mouse_pos):
-            print("COLLISION" + str(sprite))
+    track = font.render(str(mouse_pos), True, (255, 255, 255))
+    screen.blit(track, (SCREEN_WIDTH-100, 10))
+    for block in blocks:
+        if hasattr(block, "blit_sprite"):
+            block.blit_sprite(screen)
+            if block.rect.collidepoint(mouse_pos):
+                print("COLLISION" + str(block))
+        elif block.collidepoint(mouse_pos):
+            print("COLLISION" + str(block))
