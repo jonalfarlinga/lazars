@@ -51,10 +51,13 @@ class Player(pygame.sprite.Sprite):
                 rects.append(block)
         line_segments = calculate_line(self.rect.center, self.direction, rects)
         for segment in line_segments:
+            if segment[1] is None:
+                segment = (segment[0], (0, 0))
             pygame.draw.line(
                 screen,
                 RED,
-                segment,
+                segment[0],
+                segment[1]
             )
 
 
@@ -100,7 +103,7 @@ for wall in maps.testmap():
     walls.add(wall)
 
 player = Player()
-player.rect.center = (50, 100)
+player.rect.center = (500, 380)
 
 FramesPerSecond = pygame.time.Clock()
 

@@ -18,6 +18,13 @@ def distance(point1, point2):
     )
 
 
+# returns y2
+def linear_eq(source, x2, unit_vector):
+    x1, y1 = source
+    uvx, uvy = unit_vector
+    return y1 + ((x2 - x1 / uvx) * uvy)
+
+
 def calculate_line(source, deg, rects):
     line_segments = []
     while len(line_segments) < 3:
@@ -25,22 +32,25 @@ def calculate_line(source, deg, rects):
         x1, y1 = source
         uvx, uvy = deg_to_vector(deg)
         if uvx > 0:
+            collisions = []
             for x2 in range(x1+1, SCREEN_WIDTH):
-                collisions = []
-                x2 = x1 + 1
-                y2 = {
+                y2 = (
                     y1 + ((x2 - x1) / uvx) * uvy
-                }
+                )
                 for rect in rects:
-                    if rect.collidepoint(x2, y2):
+                    if rect.collidepoint((x2, y2)):
                         collisions.append((x2, y2))
-            bounce = (source, collision[0])
-            for collision in collisions:
-                if distance(source, collision):
-                    bounce = (source, collision)
+            if len(collisions) > 0:
+                bounce = (source, collision[0])
+                for collision in collisions:
+                    if distance(source, collision):
+                        bounce = (source, collision)
+                else:
+                    bounce = None
             line_segments.append((source, bounce))
         if bounce:
             source = bounce
         else:
+            bounce = (0, 0)
             break
     return line_segments
