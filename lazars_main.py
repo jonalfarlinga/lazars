@@ -11,8 +11,8 @@ FPS = 60
 FramesPerSecond = pygame.time.Clock()
 
 # load and set the logo
-# logo = pygame.image.load("logo32x32.png")
-# pygame.display.set_icon(logo)
+logo = pygame.image.load(os.path.join("assets", "laser.png"))
+pygame.display.set_icon(logo)
 pygame.display.set_caption("Lazars")
 font = pygame.font.SysFont("Arial", 20)
 
@@ -43,6 +43,16 @@ class Wall(pygame.sprite.Sprite):
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
+        self.image = pygame.image.load(os.path.join("assets", "player.png"))
+        self.rect = self.image.get_rect()
+        self.rect.center = (SCREEN_WIDTH//2, SCREEN_HEIGHT//2)
+
+    def blit_sprite(self, surface):
+        surface.blit(
+            source=self.image,
+            dest=(self.rect.centerx-self.image.get_size()[0]//2,
+                  self.rect.centery-self.image.get_size()[1]//2)
+        )
 
 
 # create a surface on screen that has the size of 240 x 180
@@ -67,6 +77,9 @@ wall = Wall()
 walls = pygame.sprite.Group()
 walls.add(wall)
 
+player = Player()
+player.rect.center = (50, 50)
+
 
 # define a main function
 def main():
@@ -85,6 +98,7 @@ def main():
             sprite.blit_sprite(screen)
             if sprite.rect.collidepoint(point):
                 print("COLLISION" + str(sprite))
+        player.blit_sprite(screen)
         # event handling, gets all event from the event queue
         for event in pygame.event.get():
             # only do something if the event is of type QUIT
