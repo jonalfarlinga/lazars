@@ -31,12 +31,12 @@ def calculate_line(source, deg, rects):
     while source and len(line_segments) < 3:
         bounce = None
         x1, y1 = source
-        uvx, uvy = deg_to_vector(deg)
-        if uvx > 0:
+        uv = deg_to_vector(deg)
+        if uv[0] > 0:
             collisions = []
             for x2 in range(x1+1, SCREEN_WIDTH):
                 y2 = int(
-                    y1 + ((x2 - x1) / uvx) * uvy
+                    linear_eq(source, x2, uv)
                 )
                 for rect in rects:
                     if rect.collidepoint((x2, y2)):
