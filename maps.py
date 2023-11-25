@@ -20,7 +20,7 @@ class Wall(pygame.sprite.Sprite):
     def blit_sprite(self, surface):
         surface.blit(
             source=self.image,
-            dest=(self.rect.centerx+self.image.get_size()[0]//2,
+            dest=(self.rect.centerx-self.image.get_size()[0]//2,
                   self.rect.centery-self.image.get_size()[1]//2)
         )
 
