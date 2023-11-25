@@ -33,7 +33,7 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.image.load(os.path.join("assets", "player.png"))
         self.rect = self.image.get_rect()
         self.rect.center = (SCREEN_WIDTH//2, SCREEN_HEIGHT//2)
-        self.direction = 75  # facing in degrees
+        self.direction = 45  # facing in degrees
 
     def blit_sprite(self, surface):
         surface.blit(
@@ -101,7 +101,6 @@ borders = [
 walls = pygame.sprite.Group()
 for wall in maps.testmap():
     walls.add(wall)
-walls.add(maps.Wall((53,56)))
 
 player = Player()
 player.rect.center = (500, 380)

@@ -7,6 +7,7 @@ Linting is ignored in this file for "Line is too long"
 '''
 
 
+
 class Wall(pygame.sprite.Sprite):
     def __init__(self, center=None):
         super().__init__()
@@ -19,7 +20,7 @@ class Wall(pygame.sprite.Sprite):
     def blit_sprite(self, surface):
         surface.blit(
             source=self.image,
-            dest=(self.rect.centerx-self.image.get_size()[0]//2,
+            dest=(self.rect.centerx+self.image.get_size()[0]//2,
                   self.rect.centery-self.image.get_size()[1]//2)
         )
 
@@ -44,7 +45,7 @@ def testmap():
     '''
     X = 1
     map = [
-        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
