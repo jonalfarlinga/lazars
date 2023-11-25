@@ -36,6 +36,15 @@ class Player(pygame.sprite.Sprite):
         self.direction = 45  # facing in degrees
 
     def blit_sprite(self, surface):
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_LEFT]:
+            self.direction -= 1
+            if self.direction < 0:
+                self.direction = 359
+        elif keys[pygame.K_RIGHT]:
+            self.direction += 1
+            if self.direction > 359:
+                self.direction = 0
         surface.blit(
             source=self.image,
             dest=(self.rect.centerx-self.image.get_size()[0]//2,
@@ -55,7 +64,7 @@ class Player(pygame.sprite.Sprite):
                 segment = (segment[0], (0, 0))
             pygame.draw.line(
                 screen,
-                RED,
+                BLACK,
                 segment[0],
                 segment[1]
             )
@@ -65,7 +74,7 @@ def print_background(screen):
     screen.fill(WHITE)
     pygame.draw.lines(
         screen,
-        BLACK,
+        RED,
         True,
         [
             (0, TOP_PAD),
@@ -83,20 +92,26 @@ initialize game environment
 # create a surface on screen and initialize entities
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 borders = [
-    pygame.draw.line(screen, WHITE, (SCREEN_WIDTH-13, 12), (12, 12)),
-    pygame.draw.line(screen, WHITE, (0, TOP_PAD), (0, SCREEN_HEIGHT+TOP_PAD-1)),
-    pygame.draw.line(
+    pygame.draw.rect(
         screen,
         WHITE,
-        (12, SCREEN_HEIGHT+TOP_PAD-13),
-        (SCREEN_WIDTH-13, SCREEN_HEIGHT+TOP_PAD-13)
+        pygame.Rect(0, 0, SCREEN_WIDTH, TOP_PAD+BORDER_WIDTH)
     ),
-    pygame.draw.line(
+    pygame.draw.rect(
         screen,
         WHITE,
-        (SCREEN_WIDTH-13, SCREEN_HEIGHT+TOP_PAD-13),
-        (SCREEN_WIDTH-13, TOP_PAD+12)
+        pygame.Rect(0,0, BORDER_WIDTH, SCREEN_HEIGHT)
     ),
+    pygame.draw.rect(
+        screen,
+        WHITE,
+        pygame.Rect(0, SCREEN_HEIGHT-BORDER_WIDTH, SCREEN_WIDTH, BORDER_WIDTH)
+    ),
+    pygame.draw.rect(
+        screen,
+        WHITE,
+        pygame.Rect(SCREEN_WIDTH-BORDER_WIDTH, 0, BORDER_WIDTH, SCREEN_HEIGHT)
+    )
 ]
 walls = pygame.sprite.Group()
 for wall in maps.testmap():
@@ -124,7 +139,7 @@ def main():
                 # change the value to False, to exit the main loop
                 pygame.quit()
                 sys.exit()
-        pygame.time.delay(10)
+        pygame.time.delay(50)
         FramesPerSecond.tick(FPS)
         pygame.display.update()
 
