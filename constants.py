@@ -15,3 +15,4 @@ WALL_SIZE = 40
 
 # set max FPS
 FPS = 60
+

@@ -25,17 +25,25 @@ def linear_eq(source, x2, unit_vector):
     return y1 + ((x2 - x1 / uvx) * uvy)
 
 
+def round(num):
+    test = num * 10
+    if test % 10 >= 5:
+        return math.ceil(num)
+    else:
+        return math.floor(num)
+
+
 def calculate_line(source, deg, rects):
     line_segments = []
-    while len(line_segments) < 3:
+    while source:
         bounce = None
         x1, y1 = source
         uvx, uvy = deg_to_vector(deg)
         if uvx > 0:
             collisions = []
             for x2 in range(x1+1, SCREEN_WIDTH):
-                y2 = (
-                    y1 + ((x2 - x1) / uvx) * uvy
+                y2 = round(
+                    y1 + ((x2 - x1) / uvx * uvy)
                 )
                 for rect in rects:
                     if rect.collidepoint((x2, y2)):
@@ -51,6 +59,5 @@ def calculate_line(source, deg, rects):
         if bounce:
             source = bounce
         else:
-            bounce = (0, 0)
-            break
+            bounce = None
     return line_segments

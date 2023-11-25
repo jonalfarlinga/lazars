@@ -38,7 +38,7 @@ def array_to_walls(array):
     return walls
 
 
-def testmap():
+def testmap2():
     '''
     Resolution
     25x18 blocks
@@ -68,7 +68,7 @@ def testmap():
     return array_to_walls(map)
 
 
-def testmap2():
+def testmap():
     '''
     Resolution
     25x18 blocks
