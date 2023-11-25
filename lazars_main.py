@@ -33,16 +33,18 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.image.load(os.path.join("assets", "player.png"))
         self.rect = self.image.get_rect()
         self.rect.center = (SCREEN_WIDTH//2, SCREEN_HEIGHT//2)
-        self.direction = 45  # facing in degrees
+        self.direction = 271  # facing in degrees
 
     def blit_sprite(self, surface):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT]:
             self.direction -= 1
+            print(self.direction)
             if self.direction < 0:
                 self.direction = 359
         elif keys[pygame.K_RIGHT]:
             self.direction += 1
+            print(self.direction)
             if self.direction > 359:
                 self.direction = 0
         surface.blit(
