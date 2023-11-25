@@ -68,7 +68,8 @@ class Player(pygame.sprite.Sprite):
                 screen,
                 BLACK,
                 segment[0],
-                segment[1]
+                segment[1],
+                width=3,
             )
 
 
