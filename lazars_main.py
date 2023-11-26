@@ -1,8 +1,7 @@
-# import the pygame module, so you can use it
 import pygame
 import sys
 import os
-from debug_me import debug
+# from debug_me import debug
 import maps
 from constants import *
 from vector_math import calculate_line
@@ -21,21 +20,25 @@ pygame.display.set_caption("Lazars")
 font = pygame.font.SysFont("Arial", 20)
 
 
-
 '''
 create classes
 '''
-
-
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
         self.image = pygame.image.load(os.path.join("assets", "player.png"))
         self.rect = self.image.get_rect()
         self.rect.center = (SCREEN_WIDTH//2, SCREEN_HEIGHT//2)
-        self.direction = 271  # facing in degrees
+        self.direction = 271  # player facing in degrees
 
     def blit_sprite(self, surface):
+        surface.blit(
+            source=self.image,
+            dest=(self.rect.centerx-self.image.get_size()[0]//2,
+                  self.rect.centery-self.image.get_size()[1]//2)
+        )
+
+    def move(self, rects):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT]:
             self.direction -= 1
@@ -47,14 +50,6 @@ class Player(pygame.sprite.Sprite):
             print(self.direction)
             if self.direction > 359:
                 self.direction = 0
-        surface.blit(
-            source=self.image,
-            dest=(self.rect.centerx-self.image.get_size()[0]//2,
-                  self.rect.centery-self.image.get_size()[1]//2)
-        )
-
-    def move(self, rects):
-        keys = pygame.key.get_pressed()
         rect_cols = self.rect.collidelistall(rects)
         if keys[pygame.K_w]:
             for i in rect_cols:
@@ -112,34 +107,14 @@ initialize game environment
 '''
 # create a surface on screen and initialize entities
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-borders = [
-    pygame.draw.rect(
-        screen,
-        WHITE,
-        pygame.Rect(0, 0, SCREEN_WIDTH, TOP_PAD+BORDER_WIDTH)
-    ),
-    pygame.draw.rect(
-        screen,
-        WHITE,
-        pygame.Rect(0,0, BORDER_WIDTH, SCREEN_HEIGHT)
-    ),
-    pygame.draw.rect(
-        screen,
-        WHITE,
-        pygame.Rect(0, SCREEN_HEIGHT-BORDER_WIDTH, SCREEN_WIDTH, BORDER_WIDTH)
-    ),
-    pygame.draw.rect(
-        screen,
-        WHITE,
-        pygame.Rect(SCREEN_WIDTH-BORDER_WIDTH, 0, BORDER_WIDTH, SCREEN_HEIGHT)
-    )
-]
+borders = maps.build_borders(screen)
+
 walls = pygame.sprite.Group()
 for wall in maps.testmap():
     walls.add(wall)
 
 player = Player()
-player.rect.center = (500, 380)
+player.rect.center = (SCREEN_WIDTH//2, SCREEN_HEIGHT//2)
 
 FramesPerSecond = pygame.time.Clock()
 
@@ -159,9 +134,9 @@ def main():
             else:
                 rects.append(block)
 
-        debug(pygame.mouse.get_pos(), screen, rects)
-        player.blit_sprite(screen)
+        # debug(pygame.mouse.get_pos(), screen, rects)  # debug functions
         player.move(rects)
+        player.blit_sprite(screen)
         player.laser(screen, rects)
         # event handling, gets all event from the event queue
         for event in pygame.event.get():
@@ -170,7 +145,7 @@ def main():
                 # change the value to False, to exit the main loop
                 pygame.quit()
                 sys.exit()
-        pygame.time.delay(10)
+        pygame.time.delay(1)
         FramesPerSecond.tick(FPS)
         pygame.display.update()
 

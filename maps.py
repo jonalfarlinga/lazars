@@ -38,6 +38,94 @@ def array_to_walls(array):
     return walls
 
 
+def build_borders(screen):
+    """
+    borders = [
+        pygame.draw.rect(
+            screen,
+            WHITE,
+            pygame.Rect(0, 0, SCREEN_WIDTH, TOP_PAD+BORDER_WIDTH)
+        ),
+        pygame.draw.rect(
+            screen,
+            WHITE,
+            pygame.Rect(0,0, BORDER_WIDTH, SCREEN_HEIGHT)
+        ),
+        pygame.draw.rect(
+            screen,
+            WHITE,
+            pygame.Rect(0, SCREEN_HEIGHT-BORDER_WIDTH,
+                        SCREEN_WIDTH, BORDER_WIDTH)
+        ),
+        pygame.draw.rect(
+            screen,
+            WHITE,
+            pygame.Rect(SCREEN_WIDTH-BORDER_WIDTH, 0,
+                        BORDER_WIDTH, SCREEN_HEIGHT)
+        ),
+        pygame.draw.rect(
+            screen,
+            WHITE,
+            pygame.Rect(0, 0, BORDER_WIDTH, BORDER_WIDTH+TOP_PAD)
+        ),
+        pygame.draw.rect(
+            screen,
+            WHITE,
+            pygame.Rect(SCREEN_WIDTH-BORDER_WIDTH, 0,
+                        BORDER_WIDTH, BORDER_WIDTH+TOP_PAD)
+        ),
+        pygame.draw.rect(
+            screen,
+            WHITE,
+            pygame.Rect(0, SCREEN_HEIGHT-BORDER_WIDTH,
+                        BORDER_WIDTH, BORDER_WIDTH)
+        ),
+        pygame.draw.rect(
+            screen,
+            WHITE,
+            pygame.Rect(SCREEN_WIDTH-BORDER_WIDTH, SCREEN_HEIGHT-BORDER_WIDTH,
+                        BORDER_WIDTH, BORDER_WIDTH)
+        )
+    ] """
+    borders = []
+    x = 0
+    while x < SCREEN_WIDTH:
+        borders.append(
+            pygame.draw.rect(
+                screen,
+                WHITE,
+                pygame.Rect(x, 0, BORDER_WIDTH, BORDER_WIDTH+TOP_PAD)
+            ),
+        )
+        borders.append(
+            pygame.draw.rect(
+                screen,
+                WHITE,
+                pygame.Rect(x, SCREEN_HEIGHT-BORDER_WIDTH,
+                            BORDER_WIDTH, BORDER_WIDTH)
+            )
+        )
+        x += BORDER_WIDTH
+    y = TOP_PAD
+    while y < SCREEN_HEIGHT:
+        borders.append(
+            pygame.draw.rect(
+                screen,
+                WHITE,
+                pygame.Rect(0, y, BORDER_WIDTH, BORDER_WIDTH)
+            )
+        )
+        borders.append(
+            pygame.draw.rect(
+                screen,
+                WHITE,
+                pygame.Rect(SCREEN_WIDTH-BORDER_WIDTH, y,
+                            BORDER_WIDTH, BORDER_WIDTH)
+            )
+        )
+        y += BORDER_WIDTH
+    return borders
+
 def testmap2():
     '''
     Resolution

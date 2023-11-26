@@ -44,7 +44,7 @@ def calculate_line(source, deg, rects):
     while source:
         bounce = None
         uv = deg_to_vector(deg)
-        if deg > 315 or deg < 45:
+        if 45 > deg or deg > 315:
             for x2 in range(source[0]+1, SCREEN_WIDTH):
                 y2 = round(
                     linear_eq(source, x2, uv)
