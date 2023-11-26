@@ -53,13 +53,31 @@ class Player(pygame.sprite.Sprite):
                   self.rect.centery-self.image.get_size()[1]//2)
         )
 
-    def laser(self, screen, blocks):
-        rects = []
-        for block in blocks:
-            if hasattr(block, "rect"):
-                rects.append(block.rect)
-            else:
-                rects.append(block)
+    def move(self, rects):
+        keys = pygame.key.get_pressed()
+        rect_cols = self.rect.collidelistall(rects)
+        if keys[pygame.K_w]:
+            for i in rect_cols:
+                if rects[i].centery < self.rect.centery:
+                    self.rect.centery += 2
+            self.rect.centery -= 1
+        if keys[pygame.K_s]:
+            for i in rect_cols:
+                if rects[i].centery > self.rect.centery:
+                    self.rect.centery -= 2
+            self.rect.centery += 1
+        if keys[pygame.K_a]:
+            for i in rect_cols:
+                if rects[i].centerx < self.rect.centerx:
+                    self.rect.centerx += 2
+            self.rect.centerx -= 1
+        if keys[pygame.K_d]:
+            for i in rect_cols:
+                if rects[i].centerx > self.rect.centerx:
+                    self.rect.centerx -= 2
+            self.rect.centerx += 1
+
+    def laser(self, screen, rects):
         line_segments = calculate_line(self.rect.center, self.direction, rects)
         for segment in line_segments:
             if segment[1] is None:
@@ -132,9 +150,19 @@ def main():
     # main loop
     while True:
         print_background(screen)
-        debug(pygame.mouse.get_pos(), screen, borders + walls.sprites())
+        rects = []
+        for block in borders + walls.sprites():
+            if hasattr(block, "blit_sprite"):
+                block.blit_sprite(screen)
+            if hasattr(block, "rect"):
+                rects.append(block.rect)
+            else:
+                rects.append(block)
+
+        debug(pygame.mouse.get_pos(), screen, rects)
         player.blit_sprite(screen)
-        player.laser(screen, borders + walls.sprites())
+        player.move(rects)
+        player.laser(screen, rects)
         # event handling, gets all event from the event queue
         for event in pygame.event.get():
             # only do something if the event is of type QUIT
@@ -142,7 +170,7 @@ def main():
                 # change the value to False, to exit the main loop
                 pygame.quit()
                 sys.exit()
-        pygame.time.delay(50)
+        pygame.time.delay(10)
         FramesPerSecond.tick(FPS)
         pygame.display.update()
 
