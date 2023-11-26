@@ -29,7 +29,7 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.image.load(os.path.join("assets", "player.png"))
         self.rect = self.image.get_rect()
         self.rect.center = (SCREEN_WIDTH//2, SCREEN_HEIGHT//2)
-        self.direction = 271  # player facing in degrees
+        self.direction = 45  # player facing in degrees
 
     def blit_sprite(self, surface):
         surface.blit(
