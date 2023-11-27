@@ -3,7 +3,7 @@ import sys
 import os
 # from debug_me import debug
 import maps
-from constants import *
+from constants import *  # noqa:F403
 from vector_math import calculate_line
 
 
@@ -23,19 +23,21 @@ font = pygame.font.SysFont("Arial", 20)
 '''
 create classes
 '''
+
+
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
         self.image = pygame.image.load(os.path.join("assets", "player.png"))
         self.rect = self.image.get_rect()
-        self.rect.center = (SCREEN_WIDTH//2, SCREEN_HEIGHT//2)
+        self.rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
         self.direction = 45  # player facing in degrees
 
     def blit_sprite(self, surface):
         surface.blit(
             source=self.image,
-            dest=(self.rect.centerx-self.image.get_size()[0]//2,
-                  self.rect.centery-self.image.get_size()[1]//2)
+            dest=(self.rect.centerx - self.image.get_size()[0] // 2,
+                  self.rect.centery - self.image.get_size()[1] // 2)
         )
 
     def move(self, rects):
@@ -114,9 +116,10 @@ for wall in maps.testmap():
     walls.add(wall)
 
 player = Player()
-player.rect.center = (SCREEN_WIDTH//2, SCREEN_HEIGHT//2)
+player.rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
 
 FramesPerSecond = pygame.time.Clock()
+
 
 # define a main function
 def main():
