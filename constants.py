@@ -14,3 +14,7 @@ WALL_SIZE = 40
 
 # set max FPS
 FPS = 60
+
+# player stats
+# should probably implement in Player()
+BOUNCES = 5

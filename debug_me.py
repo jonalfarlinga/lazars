@@ -1,5 +1,5 @@
 import pygame
-from constants import *  # noqa:F403
+from constants import *  # noqa:F403 flake8 ignore
 
 
 def debug(mouse_pos, screen, blocks):

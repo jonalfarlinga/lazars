@@ -3,7 +3,7 @@ import sys
 import os
 # from debug_me import debug
 import maps
-from constants import *  # noqa:F403
+from constants import *  # noqa:F403 flake8 ignore
 from vector_math import calculate_line
 
 
@@ -76,16 +76,18 @@ class Player(pygame.sprite.Sprite):
 
     def laser(self, screen, rects):
         line_segments = calculate_line(self.rect.center, self.direction, rects)
+        source = self.rect.center
         for segment in line_segments:
-            if segment[1] is None:
-                segment = (segment[0], (0, 0))
+            # if segment[1] is None:
+            #     segment = (segment[0], (0, 0))
             pygame.draw.line(
                 screen,
                 BLACK,
-                segment[0],
-                segment[1],
+                source,
+                segment,
                 width=3,
             )
+            source = segment
 
 
 def print_background(screen):
