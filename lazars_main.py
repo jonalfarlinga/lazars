@@ -1,7 +1,7 @@
 import pygame
 import sys
 import os
-# from debug_me import debug
+import debug_me
 import maps
 from constants import *  # noqa:F403 flake8 ignore
 from entities import Player
@@ -21,7 +21,7 @@ font = pygame.font.SysFont("Arial", 20)
 
 
 def print_background(screen):
-    screen.fill(WHITE)
+    screen.fill(BLACK)
     pygame.draw.lines(
         screen,
         RED,
@@ -57,6 +57,7 @@ def main():
     # main loop
     while True:
         print_background(screen)
+        # blit the walls and make a list of all rects
         rects = []
         for block in borders + walls.sprites():
             if hasattr(block, "blit_sprite"):
@@ -66,10 +67,10 @@ def main():
             else:
                 rects.append(block)
 
-        # debug(pygame.mouse.get_pos(), screen, rects)  # debug functions
+        # debug_me.debug(pygame.mouse.get_pos(), screen, rects)
         player.move(rects)
-        player.blit_sprite(screen)
         player.laser(screen, rects)
+        player.blit_sprite(screen)
         # event handling, gets all event from the event queue
         for event in pygame.event.get():
             # only do something if the event is of type QUIT
@@ -77,8 +78,9 @@ def main():
                 # change the value to False, to exit the main loop
                 pygame.quit()
                 sys.exit()
-        pygame.time.delay(50)
+        pygame.time.delay(0)
         FramesPerSecond.tick(FPS)
+        debug_me.fps_counter(FramesPerSecond, screen, font)
         pygame.display.update()
 
 
