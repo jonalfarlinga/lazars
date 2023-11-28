@@ -38,54 +38,6 @@ def array_to_walls(array):
 
 
 def build_borders(screen):
-    """
-    borders = [
-        pygame.draw.rect(
-            screen,
-            WHITE,
-            pygame.Rect(0, 0, SCREEN_WIDTH, TOP_PAD+BORDER_WIDTH)
-        ),
-        pygame.draw.rect(
-            screen,
-            WHITE,
-            pygame.Rect(0,0, BORDER_WIDTH, SCREEN_HEIGHT)
-        ),
-        pygame.draw.rect(
-            screen,
-            WHITE,
-            pygame.Rect(0, SCREEN_HEIGHT-BORDER_WIDTH,
-                        SCREEN_WIDTH, BORDER_WIDTH)
-        ),
-        pygame.draw.rect(
-            screen,
-            WHITE,
-            pygame.Rect(SCREEN_WIDTH-BORDER_WIDTH, 0,
-                        BORDER_WIDTH, SCREEN_HEIGHT)
-        ),
-        pygame.draw.rect(
-            screen,
-            WHITE,
-            pygame.Rect(0, 0, BORDER_WIDTH, BORDER_WIDTH+TOP_PAD)
-        ),
-        pygame.draw.rect(
-            screen,
-            WHITE,
-            pygame.Rect(SCREEN_WIDTH-BORDER_WIDTH, 0,
-                        BORDER_WIDTH, BORDER_WIDTH+TOP_PAD)
-        ),
-        pygame.draw.rect(
-            screen,
-            WHITE,
-            pygame.Rect(0, SCREEN_HEIGHT-BORDER_WIDTH,
-                        BORDER_WIDTH, BORDER_WIDTH)
-        ),
-        pygame.draw.rect(
-            screen,
-            WHITE,
-            pygame.Rect(SCREEN_WIDTH-BORDER_WIDTH, SCREEN_HEIGHT-BORDER_WIDTH,
-                        BORDER_WIDTH, BORDER_WIDTH)
-        )
-    ] """
     borders = []
     x = 0
     while x < SCREEN_WIDTH:
@@ -126,12 +78,18 @@ def build_borders(screen):
     return borders
 
 
-def testmap2():
+def build_walls(map_walls):
+    walls = pygame.sprite.Group()
+    for wall in map_walls:
+        walls.add(wall)
+    return walls
+
+
+def testmap2(X=1):
     '''
     Resolution
     25x18 blocks
     '''
-    X = 1
     map = [
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
@@ -156,12 +114,11 @@ def testmap2():
     return array_to_walls(map)
 
 
-def testmap():
+def testmap(X=1):
     '''
     Resolution
     25x18 blocks
     '''
-    X = 1
     map = [
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, X, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, X,],

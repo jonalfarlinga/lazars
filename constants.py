@@ -1,3 +1,9 @@
+'''
+App-wide settings
+Linting is ignored in this app for "Could not detect from * imports
+'''
+
+
 # initialize assets
 SCREEN_WIDTH = 1024
 SCREEN_HEIGHT = 680
@@ -14,7 +20,3 @@ WALL_SIZE = 40
 
 # set max FPS
 FPS = 60
-
-# player stats
-# should probably implement in Player()
-BOUNCES = 5

@@ -4,7 +4,7 @@ import os
 # from debug_me import debug
 import maps
 from constants import *  # noqa:F403 flake8 ignore
-from vector_math import calculate_line
+from entities import Player
 
 
 '''
@@ -18,76 +18,6 @@ logo = pygame.image.load(os.path.join("assets", "laser.png"))
 pygame.display.set_icon(logo)
 pygame.display.set_caption("Lazars")
 font = pygame.font.SysFont("Arial", 20)
-
-
-'''
-create classes
-'''
-
-
-class Player(pygame.sprite.Sprite):
-    def __init__(self):
-        super().__init__()
-        self.image = pygame.image.load(os.path.join("assets", "player.png"))
-        self.rect = self.image.get_rect()
-        self.rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
-        self.direction = 45  # player facing in degrees
-
-    def blit_sprite(self, surface):
-        surface.blit(
-            source=self.image,
-            dest=(self.rect.centerx - self.image.get_size()[0] // 2,
-                  self.rect.centery - self.image.get_size()[1] // 2)
-        )
-
-    def move(self, rects):
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_LEFT]:
-            self.direction -= 1
-            print(self.direction)
-            if self.direction < 0:
-                self.direction = 359
-        elif keys[pygame.K_RIGHT]:
-            self.direction += 1
-            print(self.direction)
-            if self.direction > 359:
-                self.direction = 0
-        rect_cols = self.rect.collidelistall(rects)
-        if keys[pygame.K_w]:
-            for i in rect_cols:
-                if rects[i].centery < self.rect.centery:
-                    self.rect.centery += 2
-            self.rect.centery -= 1
-        if keys[pygame.K_s]:
-            for i in rect_cols:
-                if rects[i].centery > self.rect.centery:
-                    self.rect.centery -= 2
-            self.rect.centery += 1
-        if keys[pygame.K_a]:
-            for i in rect_cols:
-                if rects[i].centerx < self.rect.centerx:
-                    self.rect.centerx += 2
-            self.rect.centerx -= 1
-        if keys[pygame.K_d]:
-            for i in rect_cols:
-                if rects[i].centerx > self.rect.centerx:
-                    self.rect.centerx -= 2
-            self.rect.centerx += 1
-
-    def laser(self, screen, rects):
-        line_segments = calculate_line(self.rect.center, self.direction, rects)
-        source = self.rect.center
-        for segment in line_segments:
-            # if segment[1] is None:
-            #     segment = (segment[0], (0, 0))
-            pygame.draw.line(
-                screen,
-                BLACK,
-                source,
-                segment,
-                width=3,
-            )
-            source = segment
 
 
 def print_background(screen):
@@ -112,10 +42,7 @@ initialize game environment
 # create a surface on screen and initialize entities
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 borders = maps.build_borders(screen)
-
-walls = pygame.sprite.Group()
-for wall in maps.testmap():
-    walls.add(wall)
+walls = maps.build_walls(maps.testmap())
 
 player = Player()
 player.rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
@@ -150,7 +77,7 @@ def main():
                 # change the value to False, to exit the main loop
                 pygame.quit()
                 sys.exit()
-        pygame.time.delay(1)
+        pygame.time.delay(50)
         FramesPerSecond.tick(FPS)
         pygame.display.update()
 

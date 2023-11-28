@@ -60,10 +60,10 @@ def reflect_direction(uvx, uvy, last, rect, terms_of_x):
 
 # given a point, bearing and list of rects
 # finds the line and 4 reflections, and returns a list of point pairs.
-def calculate_line(source, deg, rects):
+def calculate_line(source, deg, rects, bounces):
     bounce_points = []
     uvx, uvy = deg_to_vector(deg)
-    while source and len(bounce_points) < BOUNCES:
+    while source and len(bounce_points) < bounces:
         bounce = None
         if uvx > .7071 and (-.7072 <= uvy <= .7072):
             for x2 in range(source[0] + 1, SCREEN_WIDTH):
