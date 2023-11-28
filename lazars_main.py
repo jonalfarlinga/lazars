@@ -1,7 +1,7 @@
 import pygame
 import sys
 import os
-# from debug_me import debug
+import debug_me
 import maps
 from constants import *  # noqa:F403 flake8 ignore
 from entities import Player
@@ -66,7 +66,7 @@ def main():
             else:
                 rects.append(block)
 
-        # debug(pygame.mouse.get_pos(), screen, rects)  # debug functions
+        # debug_me.debug(pygame.mouse.get_pos(), screen, rects)
         player.move(rects)
         player.blit_sprite(screen)
         player.laser(screen, rects)
@@ -77,8 +77,9 @@ def main():
                 # change the value to False, to exit the main loop
                 pygame.quit()
                 sys.exit()
-        pygame.time.delay(50)
+        pygame.time.delay(0)
         FramesPerSecond.tick(FPS)
+        debug_me.fps_counter(FramesPerSecond, screen, font)
         pygame.display.update()
 
 

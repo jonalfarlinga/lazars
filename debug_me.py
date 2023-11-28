@@ -13,3 +13,9 @@ def debug(mouse_pos, screen, blocks):
                 print("COLLISION" + str(block))
         elif block.collidepoint(mouse_pos):
             print("COLLISION" + str(block))
+
+
+def fps_counter(clock, screen, font):
+    fps = str(int(clock.get_fps()))
+    fps_t = font.render(fps, 1, BLACK)
+    screen.blit(fps_t, (10, 10))
