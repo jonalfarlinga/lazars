@@ -118,30 +118,48 @@ def calculate_line(source, deg, rects, bounces):
                     break
                 start = runx, runy
         elif uvy > .7071 and (-.7072 <= uvx <= .7072):
+            start = source
             vector_dif = round(uvx / uvy, 5)
-            for y2 in range(source[1] + 1, SCREEN_HEIGHT):
-                x2 = proper_round(
-                    source[0] + (y2 - source[1]) * vector_dif
-                )
+            for runy in range(start[1] + 1, SCREEN_HEIGHT + 20, 20):
                 for rect in rects:
-                    if rect.collidepoint((x2, y2)):
-                        bounce = ((x2, y2))
+                    runx = proper_round(
+                        start[0] + (runy - start[1]) * vector_dif
+                    )
+                    if rect.collidepoint((runx, runy)):
+                        for y2 in range(start[1] + 1, runy + 1):
+                            x2 = proper_round(
+                                runx + (y2 - runy) * vector_dif
+                            )
+                            if rect.collidepoint((x2, y2)):
+                                bounce = ((x2, y2))
+                                uvx, uvy = reflect_direction(uvx, uvy, y2 - 1,
+                                                             rect, False)
+                                break
+                    if bounce:
                         break
                 if bounce:
-                    uvx, uvy = reflect_direction(uvx, uvy, y2 - 1, rect, False)
                     break
         elif uvy <= -.7071 and (-.7072 <= uvx <= .7072):
+            start = source
             vector_dif = round(uvx / uvy, 5)
-            for y2 in reversed(range(0, source[1] - 1)):
-                x2 = proper_round(
-                    source[0] + (y2 - source[1]) * vector_dif
-                )
+            for runy in reversed(range(0, start[1] - 1, 20)):
                 for rect in rects:
-                    if rect.collidepoint((x2, y2)):
-                        bounce = ((x2, y2))
+                    runx = proper_round(
+                        start[0] + (runy - start[1]) * vector_dif
+                    )
+                    if rect.collidepoint((runx, runy)):
+                        for y2 in reversed(range(runy, start[1])):
+                            x2 = proper_round(
+                                runx + (y2 - runy) * vector_dif
+                            )
+                            if rect.collidepoint((x2, y2)):
+                                bounce = ((x2, y2))
+                                uvx, uvy = reflect_direction(uvx, uvy, y2 + 1,
+                                                             rect, False)
+                                break
+                    if bounce:
                         break
                 if bounce:
-                    uvx, uvy = reflect_direction(uvx, uvy, y2 + 1, rect, False)
                     break
         if bounce:
             bounce_points.append(bounce)

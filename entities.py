@@ -125,7 +125,7 @@ class Player(pygame.sprite.Sprite):
         for point in line_segments:
             pygame.draw.line(
                 screen,
-                YELLOW,
+                LASER,
                 origin,
                 point,
                 width=3,
