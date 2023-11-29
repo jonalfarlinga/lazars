@@ -71,7 +71,7 @@ def calculate_line(source, deg, rects, bounces):
             #     if collide:
             #         continue (start = start, end = current range)
             # else:
-            #     start = currentrange
+            #     start = current range
             start = source
             vector_dif = round(uvy / uvx, 5)
             for runx in range(start[0] + 1, SCREEN_WIDTH + 20, 20):

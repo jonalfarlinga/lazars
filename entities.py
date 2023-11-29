@@ -123,11 +123,11 @@ class Player(pygame.sprite.Sprite):
             self.bounces)
         origin = self.rect.center
         for point in line_segments:
-            pygame.draw.line(
+            pygame.draw.aaline(
                 screen,
                 LASER,
                 origin,
                 point,
-                width=3,
+                # width=3,
             )
             origin = point
