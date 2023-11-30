@@ -1,3 +1,4 @@
+from math import pi
 '''
 App-wide settings
 Linting is ignored in this app for "Could not detect from * imports
@@ -19,6 +20,8 @@ LASER = (255, 255, 0, 100)
 
 # set unit size
 WALL_SIZE = 40
+PI = pi
+PI2 = 2 * pi
 
 # set max FPS
 FPS = 60

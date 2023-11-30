@@ -11,12 +11,32 @@ def deg_to_vector(deg):
     return unit_vector
 
 
+# radian to vector
+def rad_to_vector(rad):
+    unit_vector = (
+        math.cos(rad),
+        math.sin(rad)
+    )
+    return unit_vector
+
+
 # measures and returns the distance between two coordinates
 def distance(point1, point2):
     distance = math.sqrt(
         (point1[0] - point2[0]) ** 2 + (point1[1] - point2[1]) ** 2
     )
     return distance
+
+
+# takes a point and radian direction and an new coord component,
+# if terms_of_x returns y2
+# else returns x2
+def param_eq(source, new, rad, terms_of_x=True):
+    x1, y1 = source
+    if terms_of_x:
+        return y1 + ((new - x1) * math.sin(rad) / math.cos(rad))
+    else:
+        return x1 + ((new - y1) * math.cos(rad) / math.sin(rad))
 
 
 # takes a point and vector and an x2, returns y2
@@ -58,6 +78,7 @@ def reflect_direction(uvx, uvy, last, rect, terms_of_x):
     return uvx, uvy
 
 
+'''
 # given a point, bearing and list of rects
 # finds the line and 4 reflections, and returns a list of point pairs.
 def calculate_line(source, deg, rects, bounces):
@@ -167,3 +188,22 @@ def calculate_line(source, deg, rects, bounces):
         else:
             source = None
     return bounce_points
+'''
+
+
+# given a point, bearing and list of rects
+# finds the line and 4 reflections, and returns a list of point pairs.
+def calculate_line(source, rad, rects, bounces):
+    # while source and bounces less than bounces
+    #   draw a line from source to SCREEN_EDGE <-- SCREEN_EDGE is based on quad
+    #       find all collisions with rects
+    # noqa      find rect according to rect.edge closest to player <-- closest edge based on quadrant
+    # noqa          calculate x2 or y2 by player angle and rect.edge <-- linear eq based on quadrant
+    # noqa          --> linear_eq(source, rect.edge, rad_to_vector(rad))
+    #               assign bounce
+    #               reflect off of rect
+    #               --> uvx, uvy = reflect_direction(uvx, uvy, y2 + 1,
+    #                                                        rect, False)
+    #   append bounce
+    #   source = bounce
+    pass
