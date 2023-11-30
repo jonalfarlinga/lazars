@@ -1,5 +1,6 @@
 import math
 from constants import *  # noqa:F403 flake8 ignore
+from pygame.draw import line
 
 
 # converts a heading to a unit vector
@@ -73,6 +74,24 @@ def reflect_direction(uvx, uvy, last, rect, terms_of_x):
     else:
         if rect.top < last < rect.bottom:
             uvx = -uvx
+        else:
+            uvy = -uvy
+    return uvx, uvy
+
+
+# takes x/y vector components, the previous key value, and a rect
+# returns a reflected vector
+def rad_reflect(rad, last, rect, terms_of_x):
+    if terms_of_x:
+        if :
+            rad = PI2 - rad
+        elif rad < PI:
+            rad = PI - rad
+        else:
+            rad = PI2 + PI - rad
+    else:
+        if rect.top < last < rect.bottom:
+
         else:
             uvy = -uvy
     return uvx, uvy
@@ -193,17 +212,40 @@ def calculate_line(source, deg, rects, bounces):
 
 # given a point, bearing and list of rects
 # finds the line and 4 reflections, and returns a list of point pairs.
-def calculate_line(source, rad, rects, bounces):
+def calculate_line(source, rad, screen, rects, bounces):
     # while source and bounces less than bounces
     #   draw a line from source to SCREEN_EDGE <-- SCREEN_EDGE is based on quad
     #       find all collisions with rects
     # noqa      find rect according to rect.edge closest to player <-- closest edge based on quadrant
     # noqa          calculate x2 or y2 by player angle and rect.edge <-- linear eq based on quadrant
     # noqa          --> linear_eq(source, rect.edge, rad_to_vector(rad))
-    #               assign bounce
+    #               append bounce
     #               reflect off of rect
     #               --> uvx, uvy = reflect_direction(uvx, uvy, y2 + 1,
     #                                                        rect, False)
     #   append bounce
     #   source = bounce
+    bounce_points = []
+    if rad <= PI / 4 or PI * 7 / 4 <= rad:
+        while source and len(bounce_points) < bounces:
+            wally = source[1] + (
+                (SCREEN_WIDTH - source[0]) * math.sin(rad) / math.cos(rad)
+            )
+            ray = line(
+                screen,
+                NONE_COLOR,
+                source,
+                (SCREEN_WIDTH, wally),
+            )
+            collide_list = ray.collidelistall(rects)
+            stop = SCREEN_WIDTH
+            for rect in collide_list:
+                if rect.left < stop.left:
+                    stop = rect
+            x2 = stop.left
+            y2 = source[1] + (
+                (stop.left - source[0]) * math.sin(rad) / math.cos(rad)
+            )
+            bounce_points.append(x2, y2)
+            I havent differentiated top/bottom vs left right collisions.
     pass

@@ -17,6 +17,7 @@ WHITE = (255, 255, 255)
 RED = (255, 0, 0)
 YELLOW = (255, 255, 0)
 LASER = (255, 255, 0, 100)
+NONE_COLOR = (0, 0, 0, 0)
 
 # set unit size
 WALL_SIZE = 40
