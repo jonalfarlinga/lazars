@@ -6,7 +6,7 @@ from vector_math import calculate_line
 
 class Player(pygame.sprite.Sprite):
     # image = pygame.image.load(os.path.join("assets", "player.png"))
-    direction = 0  # player facing in radians
+    direction = 4.8  # player facing in radians
     bounces = 5
     speed = 5
     img_source = os.path.join("assets", "tank.png")
@@ -27,21 +27,21 @@ class Player(pygame.sprite.Sprite):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT]:
             self.direction -= .1
-            self.image = pygame.transform.rotate(
-                pygame.image.load(self.img_source),
-                self.direction,
-            )
-            self.image.set_colorkey(BLACK)
+            # self.image = pygame.transform.rotate(
+            #    pygame.image.load(self.img_source),
+            #    self.direction,
+            # )
+            # self.image.set_colorkey(BLACK)
             if self.direction < 0:
                 self.direction = self.direction + PI2
             print(self.direction)
         elif keys[pygame.K_RIGHT]:
             self.direction += .1
-            self.image = pygame.transform.rotate(
-                pygame.image.load(self.img_source),
-                self.direction,
-            )
-            self.image.set_colorkey(BLACK)
+            # self.image = pygame.transform.rotate(
+            #    pygame.image.load(self.img_source),
+            #    self.direction,
+            # )
+            # self.image.set_colorkey(BLACK)
             if self.direction > PI2:
                 self.direction = 0
             print(self.direction)
@@ -115,14 +115,18 @@ class Player(pygame.sprite.Sprite):
                 if not stop:
                     self.rect.centerx += 1
 
-    def laser(self, screen, rects):
-        line_segments = calculate_line(
+    def find_laser(self, screen, rects):
+        bounce_points = calculate_line(
             self.rect.center,
             self.direction,
+            screen,
             rects,
             self.bounces)
+        return bounce_points
+
+    def laser(self, screen, bounce_points):
         origin = self.rect.center
-        for point in line_segments:
+        for point in bounce_points:
             pygame.draw.aaline(
                 screen,
                 LASER,

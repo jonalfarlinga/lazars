@@ -12,6 +12,7 @@ def deg_to_vector(deg):
     return unit_vector
 
 
+
 # radian to vector
 def rad_to_vector(rad):
     unit_vector = (
@@ -74,24 +75,6 @@ def reflect_direction(uvx, uvy, last, rect, terms_of_x):
     else:
         if rect.top < last < rect.bottom:
             uvx = -uvx
-        else:
-            uvy = -uvy
-    return uvx, uvy
-
-
-# takes x/y vector components, the previous key value, and a rect
-# returns a reflected vector
-def rad_reflect(rad, last, rect, terms_of_x):
-    if terms_of_x:
-        if :
-            rad = PI2 - rad
-        elif rad < PI:
-            rad = PI - rad
-        else:
-            rad = PI2 + PI - rad
-    else:
-        if rect.top < last < rect.bottom:
-
         else:
             uvy = -uvy
     return uvx, uvy
@@ -210,42 +193,114 @@ def calculate_line(source, deg, rects, bounces):
 '''
 
 
+# assumes all collision rects are square.
+def find_bounce(source, rad, rects, ray):
+    if rad < PI:
+        refrad = rad + PI
+    else:
+        refrad = rad - PI
+    collide_list = ray.collidelistall(rects)
+    if PI * 1.25 < refrad <= PI * 1.75:  # 5pi/4 to 7pi/4
+        stop = 0
+        for index in collide_list:
+            rect = rects[index]
+            if rect.bottom > stop:
+                stop = rect.bottom
+        x2 = stop
+        y2 = source[1] + (
+            (stop - source[0]) * math.sin(rad) / math.cos(rad)
+        )
+        if rad < PI:
+            rad = PI2 + PI - rad
+        else:
+            rad = PI2 + PI - rad
+    elif PI * .75 < refrad <= PI * 1.25:  # 3pi/4 to 5pi/4
+        stop = SCREEN_WIDTH
+        for index in collide_list:
+            rect = rects[index]
+            if rect.left < stop:
+                stop = rect.left
+        x2 = stop
+        y2 = source[1] + (
+            (stop - source[0]) * math.sin(rad) / math.cos(rad)
+        )
+        if rad < PI:
+            rad = PI2 + PI - rad
+        else:
+            rad = PI2 + PI - rad
+    elif PI / 4 < refrad <= PI * .75:  # pi/4 to 3pi/4
+        stop = SCREEN_HEIGHT
+        for index in collide_list:
+            rect = rects[index]
+            if rect.top < stop:
+                stop = rect.top
+        x2 = stop
+        y2 = source[1] + (
+            (stop - source[0]) * math.sin(rad) / math.cos(rad)
+        )
+        if rad < PI:
+            rad = PI2 + PI - rad
+        else:
+            rad = PI2 + PI - rad
+    else:   # remaimder is < pi/4 or > 7pi/4
+        stop = 0
+        for index in collide_list:
+            rect = rects[index]
+            if rect.right > stop:
+                stop = rect.right
+        x2 = stop
+        y2 = source[1] + (
+            (stop - source[0]) * math.sin(rad) / math.cos(rad)
+        )
+        if rad < PI:
+            rad = PI2 + PI - rad
+        else:
+            rad = PI2 + PI - rad
+    return x2, y2, rad
+
+
 # given a point, bearing and list of rects
 # finds the line and 4 reflections, and returns a list of point pairs.
 def calculate_line(source, rad, screen, rects, bounces):
     # while source and bounces less than bounces
     #   draw a line from source to SCREEN_EDGE <-- SCREEN_EDGE is based on quad
     #       find all collisions with rects
-    # noqa      find rect according to rect.edge closest to player <-- closest edge based on quadrant
-    # noqa          calculate x2 or y2 by player angle and rect.edge <-- linear eq based on quadrant
-    # noqa          --> linear_eq(source, rect.edge, rad_to_vector(rad))
-    #               append bounce
-    #               reflect off of rect
-    #               --> uvx, uvy = reflect_direction(uvx, uvy, y2 + 1,
-    #                                                        rect, False)
+    # noqa      find rect according to rect.edge closest to player
+    # noqa      calculate x2 or y2 by player angle and rect.edge
+    #           calculate reflected angle
+    #           --> find_bounce
     #   append bounce
     #   source = bounce
     bounce_points = []
-    if rad <= PI / 4 or PI * 7 / 4 <= rad:
-        while source and len(bounce_points) < bounces:
+
+    while source and len(bounce_points) < bounces:
+        if PI / 4 < rad <= PI * .75:       # pi/4 to 3pi/4
+            wally = 0
+            wallx = source[0] + (
+                (0 - source[1]) * math.sin(rad) / math.cos(rad)
+            )
+        elif PI * .75 < rad <= PI * 1.25:  # 3pi/4 to 5pi/4
+            wallx = 0
+            wally = source[0] + (
+                (0 - source[1]) * math.sin(rad) / math.cos(rad)
+            )
+        elif PI * 1.25 < rad <= PI * 1.75:  # 5pi//4 to 7pi/4
+            wally = SCREEN_HEIGHT
+            wallx = source[0] + (
+                (SCREEN_HEIGHT - source[1]) * math.sin(rad) / math.cos(rad)
+            )
+        else:   # remainder is < p/4 or > 7pi/4
+            wallx = SCREEN_WIDTH
             wally = source[1] + (
                 (SCREEN_WIDTH - source[0]) * math.sin(rad) / math.cos(rad)
             )
-            ray = line(
-                screen,
-                NONE_COLOR,
-                source,
-                (SCREEN_WIDTH, wally),
-            )
-            collide_list = ray.collidelistall(rects)
-            stop = SCREEN_WIDTH
-            for rect in collide_list:
-                if rect.left < stop.left:
-                    stop = rect
-            x2 = stop.left
-            y2 = source[1] + (
-                (stop.left - source[0]) * math.sin(rad) / math.cos(rad)
-            )
-            bounce_points.append(x2, y2)
-            I havent differentiated top/bottom vs left right collisions.
-    pass
+        ray = line(
+            screen,
+            NONE_COLOR,
+            source,
+            (wallx, wally),
+        )
+        x2, y2, rad = find_bounce(source, rad, rects, ray)
+        bounce_points.append((x2, y2))
+        source = (x2, y2)
+    return bounce_points

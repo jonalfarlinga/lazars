@@ -20,7 +20,7 @@ pygame.display.set_caption("Lazars")
 font = pygame.font.SysFont("Arial", 20)
 
 
-def print_background(screen):
+def print_background(screen, rects, walls):
     screen.fill(BLACK)
     pygame.draw.lines(
         screen,
@@ -34,6 +34,10 @@ def print_background(screen):
         ],
         BORDER_WIDTH * 2
     )
+    laser_points = player.find_laser(screen, rects)
+    for block in walls.sprites():
+        block.blit_sprite(screen)
+    return laser_points, rects
 
 
 '''
@@ -56,20 +60,18 @@ def main():
 
     # main loop
     while True:
-        print_background(screen)
-        # blit the walls and make a list of all rects
         rects = []
         for block in borders + walls.sprites():
-            if hasattr(block, "blit_sprite"):
-                block.blit_sprite(screen)
             if hasattr(block, "rect"):
                 rects.append(block.rect)
             else:
                 rects.append(block)
 
+        laser_points, rects = print_background(screen, rects, walls)
+
         # debug_me.debug(pygame.mouse.get_pos(), screen, rects)
         player.move(rects)
-        player.laser(screen, rects)
+        player.laser(screen, laser_points)
         player.blit_sprite(screen)
         # event handling, gets all event from the event queue
         for event in pygame.event.get():
