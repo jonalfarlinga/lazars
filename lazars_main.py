@@ -46,7 +46,7 @@ initialize game environment
 # create a surface on screen and initialize entities
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 borders = maps.build_borders(screen)
-walls = maps.build_walls(maps.testmap())
+walls = maps.build_walls(maps.testmap2())
 
 player = Player()
 player.rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)

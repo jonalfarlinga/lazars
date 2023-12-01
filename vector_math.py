@@ -206,9 +206,9 @@ def find_bounce(source, rad, rects, ray):
             rect = rects[index]
             if rect.bottom > stop:
                 stop = rect.bottom
-        x2 = stop
-        y2 = source[1] + (
-            (stop - source[0]) * math.sin(rad) / math.cos(rad)
+        y2 = stop
+        x2 = source[1] + (
+            (stop - source[0]) * math.cos(rad) / math.sin(rad)
         )
         if rad < PI:
             rad = PI2 + PI - rad
@@ -234,9 +234,9 @@ def find_bounce(source, rad, rects, ray):
             rect = rects[index]
             if rect.top < stop:
                 stop = rect.top
-        x2 = stop
-        y2 = source[1] + (
-            (stop - source[0]) * math.sin(rad) / math.cos(rad)
+        y2 = stop
+        x2 = source[0] + (
+            (stop - source[1]) * math.cos(rad) / math.sin(rad)
         )
         if rad < PI:
             rad = PI2 + PI - rad
@@ -275,19 +275,19 @@ def calculate_line(source, rad, screen, rects, bounces):
 
     while source and len(bounce_points) < bounces:
         if PI / 4 < rad <= PI * .75:       # pi/4 to 3pi/4
-            wally = 0
+            wally = SCREEN_HEIGHT
             wallx = source[0] + (
-                (0 - source[1]) * math.sin(rad) / math.cos(rad)
+                (SCREEN_HEIGHT - source[1]) * math.cos(rad) / math.sin(rad)
             )
         elif PI * .75 < rad <= PI * 1.25:  # 3pi/4 to 5pi/4
             wallx = 0
-            wally = source[0] + (
-                (0 - source[1]) * math.sin(rad) / math.cos(rad)
+            wally = source[1] + (
+                (0 - source[0]) * math.sin(rad) / math.cos(rad)
             )
         elif PI * 1.25 < rad <= PI * 1.75:  # 5pi//4 to 7pi/4
-            wally = SCREEN_HEIGHT
+            wally = 0
             wallx = source[0] + (
-                (SCREEN_HEIGHT - source[1]) * math.sin(rad) / math.cos(rad)
+                (0 - source[1]) * math.cos(rad) / math.sin(rad)
             )
         else:   # remainder is < p/4 or > 7pi/4
             wallx = SCREEN_WIDTH

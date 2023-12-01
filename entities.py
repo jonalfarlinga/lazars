@@ -6,7 +6,7 @@ from vector_math import calculate_line
 
 class Player(pygame.sprite.Sprite):
     # image = pygame.image.load(os.path.join("assets", "player.png"))
-    direction = 4.8  # player facing in radians
+    direction = 0  # player facing in radians
     bounces = 5
     speed = 5
     img_source = os.path.join("assets", "tank.png")
@@ -26,7 +26,7 @@ class Player(pygame.sprite.Sprite):
     def move(self, rects):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT]:
-            self.direction -= .1
+            self.direction -= .05
             # self.image = pygame.transform.rotate(
             #    pygame.image.load(self.img_source),
             #    self.direction,
@@ -36,7 +36,7 @@ class Player(pygame.sprite.Sprite):
                 self.direction = self.direction + PI2
             print(self.direction)
         elif keys[pygame.K_RIGHT]:
-            self.direction += .1
+            self.direction += .05
             # self.image = pygame.transform.rotate(
             #    pygame.image.load(self.img_source),
             #    self.direction,
