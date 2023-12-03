@@ -12,7 +12,6 @@ def deg_to_vector(deg):
     return unit_vector
 
 
-
 # radian to vector
 def rad_to_vector(rad):
     unit_vector = (
@@ -80,119 +79,6 @@ def reflect_direction(uvx, uvy, last, rect, terms_of_x):
     return uvx, uvy
 
 
-'''
-# given a point, bearing and list of rects
-# finds the line and 4 reflections, and returns a list of point pairs.
-def calculate_line(source, deg, rects, bounces):
-    bounce_points = []
-    uvx, uvy = deg_to_vector(deg)
-    while source and len(bounce_points) < bounces:
-        bounce = None
-        if uvx > .7071 and (-.7072 <= uvy <= .7072):
-            # start = source
-            # for range(start, SCREEN, 20)
-            #     if collide:
-            #         continue (start = start, end = current range)
-            # else:
-            #     start = current range
-            start = source
-            vector_dif = round(uvy / uvx, 5)
-            for runx in range(start[0] + 1, SCREEN_WIDTH + 20, 20):
-                for rect in rects:
-                    runy = proper_round(
-                        start[1] + (runx - start[0]) * vector_dif
-                    )
-                    if rect.collidepoint((runx, runy)):
-                        for x2 in range(start[0] + 1, runx + 1):
-                            y2 = proper_round(
-                                runy + (x2 - runx) * vector_dif
-                            )
-                            if rect.collidepoint((x2, y2)):
-                                bounce = ((x2, y2))
-                                uvx, uvy = reflect_direction(uvx, uvy, x2 - 1,
-                                                             rect, True)
-                                break
-                    if bounce:
-                        break
-                if bounce:
-                    break
-                start = runx, runy
-        elif uvx <= -.7071 and (-.7072 <= uvy <= .7072):
-            start = source
-            vector_dif = round(uvy / uvx, 5)
-            for runx in reversed(range(0, start[0] - 1, 20)):
-                for rect in rects:
-                    runy = proper_round(
-                        start[1] + (runx - start[0]) * vector_dif
-                    )
-                    if rect.collidepoint((runx, runy)):
-                        for x2 in reversed(range(runx - 1, start[0])):
-                            y2 = proper_round(
-                                runy + (runx - runx) * vector_dif
-                            )
-                            if rect.collidepoint((x2, y2)):
-                                bounce = ((x2, y2))
-                                uvx, uvy = reflect_direction(uvx, uvy, x2 + 1,
-                                                             rect, True)
-                                break
-                    if bounce:
-                        break
-                if bounce:
-                    break
-                start = runx, runy
-        elif uvy > .7071 and (-.7072 <= uvx <= .7072):
-            start = source
-            vector_dif = round(uvx / uvy, 5)
-            for runy in range(start[1] + 1, SCREEN_HEIGHT + 20, 20):
-                for rect in rects:
-                    runx = proper_round(
-                        start[0] + (runy - start[1]) * vector_dif
-                    )
-                    if rect.collidepoint((runx, runy)):
-                        for y2 in range(start[1] + 1, runy + 1):
-                            x2 = proper_round(
-                                runx + (y2 - runy) * vector_dif
-                            )
-                            if rect.collidepoint((x2, y2)):
-                                bounce = ((x2, y2))
-                                uvx, uvy = reflect_direction(uvx, uvy, y2 - 1,
-                                                             rect, False)
-                                break
-                    if bounce:
-                        break
-                if bounce:
-                    break
-        elif uvy <= -.7071 and (-.7072 <= uvx <= .7072):
-            start = source
-            vector_dif = round(uvx / uvy, 5)
-            for runy in reversed(range(0, start[1] - 1, 20)):
-                for rect in rects:
-                    runx = proper_round(
-                        start[0] + (runy - start[1]) * vector_dif
-                    )
-                    if rect.collidepoint((runx, runy)):
-                        for y2 in reversed(range(runy, start[1])):
-                            x2 = proper_round(
-                                runx + (y2 - runy) * vector_dif
-                            )
-                            if rect.collidepoint((x2, y2)):
-                                bounce = ((x2, y2))
-                                uvx, uvy = reflect_direction(uvx, uvy, y2 + 1,
-                                                             rect, False)
-                                break
-                    if bounce:
-                        break
-                if bounce:
-                    break
-        if bounce:
-            bounce_points.append(bounce)
-            source = bounce
-        else:
-            source = None
-    return bounce_points
-'''
-
-
 # assumes all collision rects are square.
 def find_bounce(source, rad, rects, ray):
     if rad < PI:
@@ -200,21 +86,21 @@ def find_bounce(source, rad, rects, ray):
     else:
         refrad = rad - PI
     collide_list = ray.collidelistall(rects)
-    if PI * 1.25 < refrad <= PI * 1.75:  # 5pi/4 to 7pi/4
+    if PI * 1.25 < refrad <= PI * 1.75:  # 5pi/4 to 7pi/4 - horizontal wall
         stop = 0
         for index in collide_list:
             rect = rects[index]
             if rect.bottom > stop:
                 stop = rect.bottom
         y2 = stop
-        x2 = source[1] + (
-            (stop - source[0]) * math.cos(rad) / math.sin(rad)
+        x2 = source[0] + (
+            (stop - source[1]) * math.cos(rad) / math.sin(rad)
         )
-        if rad < PI:
-            rad = PI2 + PI - rad
-        else:
-            rad = PI2 + PI - rad
-    elif PI * .75 < refrad <= PI * 1.25:  # 3pi/4 to 5pi/4
+        # if rad < PI:
+        #    rad = PI2 - PI - rad
+        # else:
+        rad = -PI - rad
+    elif PI * .75 < refrad <= PI * 1.25:  # 3pi/4 to 5pi/4 - vertical wall
         stop = SCREEN_WIDTH
         for index in collide_list:
             rect = rects[index]
@@ -224,11 +110,11 @@ def find_bounce(source, rad, rects, ray):
         y2 = source[1] + (
             (stop - source[0]) * math.sin(rad) / math.cos(rad)
         )
-        if rad < PI:
-            rad = PI2 + PI - rad
-        else:
-            rad = PI2 + PI - rad
-    elif PI / 4 < refrad <= PI * .75:  # pi/4 to 3pi/4
+        # if rad < PI:
+        #    rad = PI - rad
+        # else:
+        rad = -rad
+    elif PI / 4 < refrad <= PI * .75:  # pi/4 to 3pi/4 - horizontal wall
         stop = SCREEN_HEIGHT
         for index in collide_list:
             rect = rects[index]
@@ -238,11 +124,11 @@ def find_bounce(source, rad, rects, ray):
         x2 = source[0] + (
             (stop - source[1]) * math.cos(rad) / math.sin(rad)
         )
-        if rad < PI:
-            rad = PI2 + PI - rad
-        else:
-            rad = PI2 + PI - rad
-    else:   # remaimder is < pi/4 or > 7pi/4
+        # if rad < PI:
+        #    rad = PI2 + PI - rad
+        # else:
+        rad = -PI - rad
+    else:   # remaimder is < pi/4 or > 7pi/4 - vertical wall
         stop = 0
         for index in collide_list:
             rect = rects[index]
@@ -252,10 +138,15 @@ def find_bounce(source, rad, rects, ray):
         y2 = source[1] + (
             (stop - source[0]) * math.sin(rad) / math.cos(rad)
         )
-        if rad < PI:
-            rad = PI2 + PI - rad
-        else:
-            rad = PI2 + PI - rad
+        # if rad < PI:
+        #    rad = PI2 + PI - rad
+        # else:
+        rad = -rad
+    while rad > PI2 or rad < 0:
+        if rad < 0:
+            rad += PI2
+        elif rad > PI2:
+            rad -= PI2
     return x2, y2, rad
 
 
@@ -284,12 +175,12 @@ def calculate_line(source, rad, screen, rects, bounces):
             wally = source[1] + (
                 (0 - source[0]) * math.sin(rad) / math.cos(rad)
             )
-        elif PI * 1.25 < rad <= PI * 1.75:  # 5pi//4 to 7pi/4
+        elif PI * 1.25 < rad <= PI * 1.75:  # 5pi/4 to 7pi/4
             wally = 0
             wallx = source[0] + (
                 (0 - source[1]) * math.cos(rad) / math.sin(rad)
             )
-        else:   # remainder is < p/4 or > 7pi/4
+        else:               # remainder is < p/4 or > 7pi/4
             wallx = SCREEN_WIDTH
             wally = source[1] + (
                 (SCREEN_WIDTH - source[0]) * math.sin(rad) / math.cos(rad)
