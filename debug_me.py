@@ -2,6 +2,7 @@ import pygame
 from constants import *  # noqa:F403 flake8 ignore
 
 
+# print and render functions for debugging purposes
 def debug(mouse_pos, screen, blocks):
     font = pygame.font.SysFont("Arial", 20)
     track = font.render(str(mouse_pos), True, (255, 255, 255))
@@ -13,9 +14,9 @@ def debug(mouse_pos, screen, blocks):
                 print("COLLISION" + str(block))
         elif block.collidepoint(mouse_pos):
             print("COLLISION" + str(block))
-    # Show FPS
 
 
+# Show FPS
 def fps_counter(clock, screen, font):
     fps = str(int(clock.get_fps()))
     fps_t = font.render(fps, 1, YELLOW)
