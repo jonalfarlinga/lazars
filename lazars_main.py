@@ -20,8 +20,8 @@ pygame.display.set_caption("Lazars")
 font = pygame.font.SysFont("Arial", 20)
 
 
-def print_background(screen):
-    screen.fill(WHITE)
+def print_background(screen, rects, walls):
+    screen.fill(BLACK)
     pygame.draw.lines(
         screen,
         RED,
@@ -34,6 +34,10 @@ def print_background(screen):
         ],
         BORDER_WIDTH * 2
     )
+    laser_points = player.find_laser(screen, rects)
+    for block in walls.sprites():
+        block.blit_sprite(screen)
+    return laser_points, rects
 
 
 '''
@@ -42,7 +46,7 @@ initialize game environment
 # create a surface on screen and initialize entities
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 borders = maps.build_borders(screen)
-walls = maps.build_walls(maps.testmap())
+walls = maps.build_walls(maps.testmap2())
 
 player = Player()
 player.rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
@@ -56,20 +60,19 @@ def main():
 
     # main loop
     while True:
-        print_background(screen)
         rects = []
         for block in borders + walls.sprites():
-            if hasattr(block, "blit_sprite"):
-                block.blit_sprite(screen)
             if hasattr(block, "rect"):
                 rects.append(block.rect)
             else:
                 rects.append(block)
 
+        laser_points, rects = print_background(screen, rects, walls)
+
         # debug_me.debug(pygame.mouse.get_pos(), screen, rects)
         player.move(rects)
+        player.laser(screen, laser_points)
         player.blit_sprite(screen)
-        player.laser(screen, rects)
         # event handling, gets all event from the event queue
         for event in pygame.event.get():
             # only do something if the event is of type QUIT
@@ -77,8 +80,9 @@ def main():
                 # change the value to False, to exit the main loop
                 pygame.quit()
                 sys.exit()
-        pygame.time.delay(0)
+        pygame.time.wait(15)
         FramesPerSecond.tick(FPS)
+        debug_me.fps_counter(FramesPerSecond, screen, font)
         debug_me.fps_counter(FramesPerSecond, screen, font)
         pygame.display.update()
 
