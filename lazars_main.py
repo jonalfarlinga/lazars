@@ -20,8 +20,15 @@ pygame.display.set_caption("Lazars")
 font = pygame.font.SysFont("Arial", 20)
 
 
-def print_background(screen, rects, walls):
+def print_background(screen, walls):
     screen.fill(BLACK)
+    rects = []
+    for block in borders + walls.sprites():
+        if hasattr(block, "blit_sprite"):
+            rects.append(block.rect)
+            block.blit_sprite(screen)
+        else:
+            rects.append(block)
     pygame.draw.lines(
         screen,
         RED,
@@ -34,10 +41,8 @@ def print_background(screen, rects, walls):
         ],
         BORDER_WIDTH * 2
     )
-    laser_points = player.find_laser(screen, rects)
-    for block in walls.sprites():
-        block.blit_sprite(screen)
-    return laser_points, rects
+
+    return rects
 
 
 '''
@@ -60,18 +65,11 @@ def main():
 
     # main loop
     while True:
-        rects = []
-        for block in borders + walls.sprites():
-            if hasattr(block, "rect"):
-                rects.append(block.rect)
-            else:
-                rects.append(block)
-
-        laser_points, rects = print_background(screen, rects, walls)
+        rects = print_background(screen, walls)
 
         # debug_me.debug(pygame.mouse.get_pos(), screen, rects)
         player.move(rects)
-        player.laser(screen, laser_points)
+        player.laser(screen, rects)
         player.blit_sprite(screen)
         # event handling, gets all event from the event queue
         for event in pygame.event.get():
@@ -80,7 +78,7 @@ def main():
                 # change the value to False, to exit the main loop
                 pygame.quit()
                 sys.exit()
-        pygame.time.wait(15)
+        pygame.time.wait(30)
         FramesPerSecond.tick(FPS)
         debug_me.fps_counter(FramesPerSecond, screen, font)
         debug_me.fps_counter(FramesPerSecond, screen, font)

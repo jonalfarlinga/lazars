@@ -85,7 +85,7 @@ def build_walls(map_walls):
     return walls
 
 
-def testmap2(X=1):
+def testmap(X=1):
     '''
     Resolution
     25x18 blocks
@@ -114,7 +114,7 @@ def testmap2(X=1):
     return array_to_walls(map)
 
 
-def testmap(X=1):
+def testmap2(X=1):
     '''
     Resolution
     25x18 blocks
