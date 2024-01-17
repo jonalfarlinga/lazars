@@ -1,4 +1,5 @@
 from math import pi
+from pygame import Color
 '''
 App-wide settings
 Linting is ignored in this app for "Could not detect from * imports

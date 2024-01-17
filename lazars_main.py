@@ -80,7 +80,7 @@ def main():
                 # change the value to False, to exit the main loop
                 pygame.quit()
                 sys.exit()
-        pygame.time.wait(15)
+        pygame.time.wait(1)
         FramesPerSecond.tick(FPS)
         debug_me.fps_counter(FramesPerSecond, screen, font)
         pygame.display.update()

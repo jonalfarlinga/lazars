@@ -15,7 +15,6 @@ def debug(mouse_pos, screen, blocks):
             print("COLLISION" + str(block))
     # Show FPS
 
-
 def fps_counter(clock, screen, font):
     fps = str(int(clock.get_fps()))
     fps_t = font.render(fps, 1, YELLOW)
