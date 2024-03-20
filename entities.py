@@ -5,7 +5,8 @@ from vector_math import calculate_line
 
 
 class Player(pygame.sprite.Sprite):
-    direction = 0  # player facing in degrees
+    # image = pygame.image.load(os.path.join("assets", "player.png"))
+    direction = 0  # player facing in radians
     bounces = 5
     speed = 5
 

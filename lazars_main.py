@@ -1,7 +1,7 @@
 import pygame
 import sys
 import os
-# import debug_me
+import debug_me
 import maps
 from constants import *  # noqa:F403 flake8 ignore
 from entities import Player
@@ -100,8 +100,7 @@ def main():
 
         # debuggers
         #       debug_me.debug(pygame.mouse.get_pos(), screen, rects)
-        #       debug_me.fps_counter(FramesPerSecond, screen, font)
-        #       debug_me.fps_counter(FramesPerSecond, screen, font)
+        debug_me.fps_counter(FramesPerSecond, screen, font)
 
         # update display
         pygame.display.update()
