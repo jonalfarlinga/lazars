@@ -1,7 +1,7 @@
-from constants import *  # noqa=F403
+from .constants import *  # noqa=F403
 import pygame
 import os
-from vector_math import calculate_line
+from .vector_math import calculate_line
 
 
 class Player(pygame.sprite.Sprite):

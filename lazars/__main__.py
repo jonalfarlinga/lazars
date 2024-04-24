@@ -1,10 +1,10 @@
 import pygame
 import sys
 import os
-# import debug_me
-import maps
-from constants import *  # noqa:F403 flake8 ignore
-from entities import Player
+import lazars.debug_me as debug_me
+import lazars.maps as maps
+from .constants import *  # noqa:F403 flake8 ignore
+from .entities import Player
 
 
 '''
@@ -99,9 +99,8 @@ def main():
         FramesPerSecond.tick(FPS)
 
         # debuggers
-        #       debug_me.debug(pygame.mouse.get_pos(), screen, rects)
-        #       debug_me.fps_counter(FramesPerSecond, screen, font)
-        #       debug_me.fps_counter(FramesPerSecond, screen, font)
+        debug_me.debug(pygame.mouse.get_pos(), screen, rects)
+        debug_me.fps_counter(FramesPerSecond, screen, font)
 
         # update display
         pygame.display.update()

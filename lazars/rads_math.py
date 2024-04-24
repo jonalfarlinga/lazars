@@ -1,7 +1,7 @@
 # radians calculation had fatal errors prompting a rebuild
 
 import math
-from constants import *  # noqa:F403 flake8 ignore
+from .constants import *  # noqa:F403 flake8 ignore
 from pygame.draw import line
 
 

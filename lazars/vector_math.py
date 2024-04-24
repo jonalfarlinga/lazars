@@ -1,5 +1,5 @@
 import math
-from constants import *  # noqa:F403 flake8 ignore
+from .constants import *  # noqa:F403 flake8 ignore
 
 
 # converts a bearing to a unit vector

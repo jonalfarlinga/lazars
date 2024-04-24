@@ -1,5 +1,5 @@
 import pygame
-from constants import *  # noqa:F403 flake8 ignore
+from .constants import *  # noqa:F403 flake8 ignore
 
 
 # print and render functions for debugging purposes
